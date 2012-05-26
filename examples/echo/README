@@ -1,0 +1,64 @@
+A simple Echo server that is not written in the style of an Erlang OTP
+application. This server uses libdist to make a distributed failure-tolerant
+service.
+
+To run this, first get the dependencies using 'make deps' then compile using
+'make compile'.
+
+Next, run the erlang interpreter with the correct paths loaded. The supplied
+'./erl' script is a convenient way of doing that.
+
+Here is an example playing with a replicated echo server from an erlang
+interpreter:
+
+1> Conf1 = echo:start_chain( lists:duplicate(3, node()) ). 
+{conf,chain,echo,1,[<0.33.0>,<0.34.0>,<0.35.0>]}
+
+Conf1 is now the configuration of an echo server replicated on 3 processes on
+the local node.
+
+2> echo:echo(Conf1, "Hello World!").
+{<0.35.0>,echo_server,"Hello World!"}
+
+Pushing through a simple 'echo' command.
+
+3> echo:set_tag(Conf1, new_tag).
+ok
+4> echo:echo(Conf1, "How are you?").
+{<0.35.0>,new_tag,"How are you?"}
+
+Executed a command that modifies the local state, then checked it worked.
+
+5> Conf2 = echo:stop_replica(Conf1, 3, just_for_testing).
+Stopping <0.35.0> because just_for_testing
+{conf,chain,echo,2,[<0.33.0>,<0.34.0>]}
+
+Stopping one of the replicas and obtaining a new configuration.
+
+6> echo:echo(Conf2, "Now working under a new configuration :)").
+{<0.34.0>,new_tag,
+ "Now working under a new configuration :)"}
+
+The new configuration still works.
+
+7> NewPid = echo:fork_replica(Conf2, 2, node()).
+<0.48.0>
+
+Forking one of the replicas in the chain.
+
+8> {_, _, _, _, OldReplicas} = Conf2.
+{conf,chain,echo,2,[<0.33.0>,<0.34.0>]}
+9> OldReplicas.
+[<0.33.0>,<0.34.0>]
+10> NewReplicas = [NewPid | OldReplicas].
+[<0.48.0>,<0.33.0>,<0.34.0>]
+11> Conf3 = repobj:reconfigure(Conf2, NewReplicas, 1000).
+{conf,chain,echo,3,[<0.48.0>,<0.33.0>,<0.34.0>]}
+
+Reconfigured the chain to integrate the new replica.
+
+12> echo:echo(Conf3, "Hooray! New Chain :)").
+{<0.34.0>,new_tag,"Hooray! New Chain :)"}
+
+The replicated object still works with the new chain.
+
