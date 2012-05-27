@@ -80,9 +80,9 @@ new(_Args = [Tag]) ->
 % command. The echo server understands two types of commands, 'set_tag' which
 % modifies the internal state of the server, and 'echo' which is a 'readonly'
 % command that echoes the passed in message.
-do(_Pid, {set_tag, NewTag}) ->
+do(Pid, {set_tag, NewTag}) ->
    put(tag, NewTag),
-   ok;
+   {Pid, ok};
 do(Pid, {echo, Message}) ->
    {Pid, get(tag), Message};
 do(_, _) ->
