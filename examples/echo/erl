@@ -1,1 +1,1 @@
-erl -pa deps/repobj/ebin/ ebin/
+erl -pa deps/repobj/ebin/ ebin/ $@
