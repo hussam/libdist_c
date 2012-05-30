@@ -2,6 +2,7 @@
 
 % Echo Public API
 -export([
+      start_c/3,
       start/3,
       start_chain/1,
       start_pb/1,
@@ -24,6 +25,9 @@
 % 5 second timeout
 -define(TIMEOUT, 5000).
 
+start_c(RepProtocol, RepArgs, Nodes) ->
+   ok = erlang:load_nif("./priv/echo_drv", 0),
+   start(RepProtocol, RepArgs, Nodes).
 
 % Start a replicated 'echo' server given using RepProtocol on a bunch of Nodes
 start(RepProtocol, RepArgs, Nodes) ->
