@@ -1,0 +1,11 @@
+#!/bin/bash
+
+if [ $# -ge 1 ]
+then
+   args=${@:2}
+   echo "./dev/dev$1/bin/node console $args"
+   ./dev/dev$1/bin/node console $args
+else
+   echo "USAGE: $0 dev_NUM"
+   exit -1
+fi

@@ -1,0 +1,10 @@
+#!/bin/bash
+
+if [ $# -eq 1 ]
+then
+   echo "./dev/dev$1/bin/node attach"
+   ./dev/dev$1/bin/node attach
+else
+   echo "USAGE: $0 dev_NUM"
+   exit -1
+fi

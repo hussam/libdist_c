@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if [ $# -eq 1 ]
+then
+   echo "./dev/dev$1/bin/node start"
+   ./dev/dev$1/bin/node start
+elif [ $# -ge 2 ]
+then
+   for i in $(seq $1 $2)
+   do
+      args=${@:3}
+      echo "./dev/dev$i/bin/node start $args"
+      ./dev/dev$i/bin/node start $args
+   done
+else
+   echo "USAGE: $0 dev_NUM"
+   echo "       $0 starting_NUM ending_NUM [OTHER PARAMS]"
+   exit -1
+fi

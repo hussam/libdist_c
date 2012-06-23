@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ $# -eq 1 ]
+then
+   echo "./dev/dev$1/bin/node ping"
+   ./dev/dev$1/bin/node ping
+elif [ $# -eq 2 ]
+then
+   for i in $(seq $1 $2)
+   do
+      echo "./dev/dev$i/bin/node ping"
+      ./dev/dev$i/bin/node ping
+   done
+else
+   echo "USAGE: $0 dev_NUM"
+   echo "       $0 starting_NUM ending_NUM"
+   exit -1
+fi

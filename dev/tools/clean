@@ -1,0 +1,18 @@
+#!/bin/bash
+
+if [ $# -eq 1 ]
+then
+   echo "rm -rf dev/dev$1/data"
+   rm -rf dev/dev$1/data
+elif [ $# -eq 2 ]
+then
+   for i in $(seq $1 $2)
+   do
+      echo "rm -rf dev/dev$i/data"
+      rm -rf dev/dev$i/data
+   done
+else
+   echo "USAGE: $0 dev_NUM"
+   echo "       $0 starting_NUM ending_NUM"
+   exit -1
+fi

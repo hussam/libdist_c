@@ -1,0 +1,3 @@
+A simple wrapper around libdist in C. Servers are implemented as native
+implemented functions (NIFs) while clients are Erlang C-Nodes that use Erlang
+RPC to connect to a proxy node that executes commands on their behalf.
