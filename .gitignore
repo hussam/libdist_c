@@ -1,3 +1,14 @@
+*Makefile
+*Makefile.in
+aclocal.m4
+config.h
+config.h.in
+config.log
+config.status
+configure
+install-sh
+missing
+stamp-h1
 deps
 *.beam
 .*.swp
@@ -5,3 +16,5 @@ deps
 *~
 *.o
 .DS_Store
+autoscan.log
+autom4te.cache
