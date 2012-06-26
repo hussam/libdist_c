@@ -12,5 +12,5 @@ calc_server.so: calc_server.c
 		-dynamiclib -o calc_server.so
 
 clean:
-	rm -v libdist_client.so libdist_server.so
-	rm -v calc_client calc_server.so
+	rm -rv libdist_client.so libdist_server.so
+	rm -rv calc_client calc_server.so
