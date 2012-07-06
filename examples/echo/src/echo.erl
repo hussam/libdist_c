@@ -72,23 +72,22 @@ stop_replica(Obj, N, Reason) ->
 % All the functions below are just implementing the repobj interface
 
 
-
 % The new/1 function takes in a bunch of arguments and returns the id of a new
 % local instance of the core. In this case, the arguments contain a tag used by
 % the echo server.
 new(_Args = [Tag]) ->
-   put(tag, Tag),
-   self().
+   spawn(fun() -> loop(Tag) end).
 
 % The do/2 function takes in an instance Id, and a command and executes the
 % command. The echo server understands two types of commands, 'set_tag' which
 % modifies the internal state of the server, and 'echo' which is a 'readonly'
 % command that echoes the passed in message.
 do(Pid, {set_tag, NewTag}) ->
-   put(tag, NewTag),
-   {Pid, ok};
+   Pid ! {self(), set, NewTag},
+   receive Result -> Result end;
 do(Pid, {echo, Message}) ->
-   {Pid, get(tag), Message};
+   Pid ! {self(), echo, Message},
+   receive Result -> Result end;
 do(_, _) ->
    undefined_op.
 
@@ -96,8 +95,10 @@ do(_, _) ->
 % creates a copy of "instance Id" on the supplied node, according to the
 % arguments specified. In this implementation, all it does is spawn a new echo
 % server on the given node.
-fork(_Pid, ForkNode, _ForkArgs) ->
-   spawn(ForkNode, ?MODULE, new, [[get(tag)]]).
+fork(Pid, ForkNode, _ForkArgs) ->
+   Pid ! {self(), get},
+   receive Tag -> Tag end,
+   spawn(ForkNode, fun() -> loop(Tag) end).
 
 % The is_mutating/1 function takes in a command and returns true/false if the
 % command will change the internal state of the local core or not.
@@ -111,3 +112,15 @@ is_mutating({echo, _}) ->
 % request.
 stop(Pid, Reason) ->
    io:format("Stopping ~p because ~p\n", [Pid, Reason]).
+
+
+
+% Main loop of the echo server keeping its local state and generating output
+% results
+loop(Tag) ->
+   receive
+      {Pid, get} -> Pid ! Tag, loop(Tag);
+      {Pid, set, NewTag} -> Pid ! {Pid, ok}, loop(NewTag);
+      {Pid, echo, Message} -> Pid ! {Pid, Tag, Message}, loop(Tag)
+   end.
+
