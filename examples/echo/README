@@ -46,13 +46,11 @@ The new configuration still works.
 
 Forking one of the replicas in the chain.
 
-8> {_, _, _, _, OldReplicas} = Conf2.
-{conf,chain,echo,2,[<0.33.0>,<0.34.0>]}
-9> OldReplicas.
+8> OldReplicas = repobj:pids(Conf2).
 [<0.33.0>,<0.34.0>]
 10> NewReplicas = [NewPid | OldReplicas].
 [<0.48.0>,<0.33.0>,<0.34.0>]
-11> Conf3 = repobj:reconfigure(Conf2, NewReplicas, 1000).
+11> Conf3 = repobj:reconfigure(Conf2, NewReplicas, [], 1000).
 {conf,chain,echo,3,[<0.48.0>,<0.33.0>,<0.34.0>]}
 
 Reconfigured the chain to integrate the new replica.
