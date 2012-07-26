@@ -1,0 +1,5 @@
+Cython
+erlport
+-e git+git://github.com/hoangelos/python-erlang-interface.git#egg=pyerl
+-e hg+https://bitbucket.org/denis/gevent#egg=gevent
+greenlet

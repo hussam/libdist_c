@@ -14,6 +14,17 @@ deps
 *.orig
 *~
 *.o
+*.pyc
+*.so
+dev/*
+apps/libdist_python/build/*
+apps/libdist_python/ebin/*
+apps/libdist_python/files.txt
+examples/calc_python/build/*
+examples/calc_python/dev/*
+examples/calc/calc_client
+*.log
 .DS_Store
+Makefile
 autoscan.log
 autom4te.cache
