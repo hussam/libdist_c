@@ -35,4 +35,24 @@ AC_CONFIG_FILES([ Makefile ])
 
 AM_INIT_AUTOMAKE([1.10 no-define foreign])
 
+AC_CANONICAL_HOST
+# Check for which host we are on and setup a few things
+# specifically based on the host
+case $host_os in
+  darwin* )
+        # Do something specific for mac
+		GCC_FLAGS="-undefined dynamic_lookup -dynamiclib -Wall -m32"
+        ;;
+  linux*)
+        # Do something specific for linux
+		GCC_FLAGS="-fPIC -shared -Wall"
+        ;;
+    *)
+        #Default Case
+        AC_MSG_ERROR([Your platform is not currently supported])
+        ;;
+esac
+
+AC_SUBST(GCC_FLAGS)
+
 AC_OUTPUT
