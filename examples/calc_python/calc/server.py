@@ -82,7 +82,7 @@ if __name__ == "__main__":
     calcserver = logging.getLogger("CalcServer")
     calcserver.setLevel(logging.DEBUG)
         
-    h1 = logging.FileHandler("/Users/phalliday/cs5999/libdist/examples/calc_python/calcserver.log")
+    h1 = logging.FileHandler("calcserver.log")
     f = logging.Formatter("%(levelname)s %(asctime)s %(funcName)s %(lineno)d %(message)s")
     h1.setFormatter(f)
     h1.setLevel(logging.DEBUG)
